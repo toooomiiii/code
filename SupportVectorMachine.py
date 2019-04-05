@@ -1,10 +1,6 @@
 import sys
 
-def SelectSupportVector(data):
-    supportVector = data
-    return supportVector
-
-def MaximumMargin(supportVectors):
+def MaximumMargin(data):
     weight = []
     return weight
 
@@ -19,8 +15,7 @@ def DotProduct(vector1, vector2):
 
 def SupportVectorMachine(data, weight, train=True):
     if train:
-        supportVectors = SelectSupportVector(data)
-        weight = MaximumMargin(supportVectors)
+        weight = MaximumMargin(data)
         return weight
     else:
         taggedData = []
