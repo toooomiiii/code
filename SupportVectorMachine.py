@@ -26,6 +26,23 @@ def CalculateDistance(weight, datum):
     distance = np.abs(DotProduct(weight[1:], datum) + weight[0]) / DotProduct(weight[1:], weight[1:])
     return distance
 
+def DoMaximize(weight, sv):
+    # using scipy.optimize.fmin and that's all.
+    FunctionToMinimize = lambda weight : -1 * CalculateMargin(weight, sv)
+    [weight, minMinusMargin, iter, funcalls, warnflag, allvecs] = optimize.fmin(
+        FunctionToMinimize,
+        weight,
+        args=(),
+        callback=None,
+        xtol=1e-4,
+        ftol=1e-4,
+        maxiter=400,
+        maxfun=400,
+        disp=False,
+        retall=True,
+        full_output=True)
+    return -1 * minMinusMargin, weight
+
 def MaximumMargin(data, initialWeight):
     dataClassTrue = data[0]
     dataClassFalse = data[1]
@@ -37,19 +54,20 @@ def MaximumMargin(data, initialWeight):
         marginCandidatesFalse = [CalculateDistance(weight, datum) for datum in dataClassFalse]
 
         # choose support vectors which are nearest data samples to the separation plane.
-        [supportVectorTrue, indxTrue] = min(marginCandidatesTrue)
-        [supportVectorFalse, indxFalse] = min(marginCandidatesFalse)
+        indxTrue = np.argmin(marginCandidatesTrue)
+        indxFalse = np.argmin(marginCandidatesFalse)
 
-        sv = [dataClassTrue(indxTrue), dataClassFalse(indxFalse)]
+        sv = [dataClassTrue[indxTrue], dataClassFalse[indxFalse]]
 
         # maximize margin in respect of weight.
-        [mgn, weight] = Maximize(weight, sv)
+        [maxMargin, weight] = DoMaximize(weight, sv)
 
         margins[1] = margins[0]
-        margins[0] = CalculateMargin(weight, sv)
+        margins[0] = maxMargin
 
         if margins[0] - margins[1] < 1:
             break
+        print(margins[0])
 
     return weight
 
