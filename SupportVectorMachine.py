@@ -26,9 +26,15 @@ def CalculateDistance(weight, datum):
     distance = np.abs(DotProduct(weight[1:], datum) + weight[0]) / DotProduct(weight[1:], weight[1:])
     return distance
 
+def CalculateDistanceWithSign(weight, datum):
+    # len(weight) + 1 == len(datum)
+    distance = (DotProduct(weight[1:], datum) + weight[0]) / DotProduct(weight[1:], weight[1:])
+    return distance
+
 def DoMaximize(weight, sv):
     # using scipy.optimize.fmin and that's all.
-    FunctionToMinimize = lambda weight : -1 * CalculateMargin(weight, sv)
+    # FunctionToMinimize = lambda weight : -1 * CalculateMargin(weight, sv)
+    FunctionToMinimize = lambda weight: CalculateDistanceWithSign(weight, sv[0]) + CalculateDistanceWithSign(weight, sv[1])
     [weight, minMinusMargin, iter, funcalls, warnflag, allvecs] = optimize.fmin(
         FunctionToMinimize,
         weight,
@@ -86,8 +92,8 @@ def SupportVectorMachine(data, weight, train=True):
         return resultWeight
     else:
         taggedData = []
-        for datumVector in data:
-            datumVector.append(1)
+        for datum in data:
+            datumVector = np.append(1, datum)
             selector = DotProduct(datumVector, weight)
             tag = selector > 0
             taggedData.append(tag)
@@ -96,11 +102,13 @@ def SupportVectorMachine(data, weight, train=True):
 def main():
     iris_dataset = load_iris()
     [dataForTraining, dataForTest] = MakeIrisDataset(iris_dataset)
+    dataForTest = np.append(dataForTest[0], dataForTest[1], 0)
     dataSize = np.size(dataForTraining[0][0])
     weight = np.random.rand(dataSize + 1)
 
     weight = SupportVectorMachine(dataForTraining, weight, train=True)
     taggedData = SupportVectorMachine(dataForTest, weight, train=False)
-
+    print(np.sum(np.array(taggedData[:25]).astype(np.int)))
+    print(np.sum(np.array(taggedData[25:]).astype(np.int)))
 if __name__ == '__main__':
     main()
