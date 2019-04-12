@@ -65,7 +65,7 @@ def MaximumMargin(data, initialWeight):
 
         sv = [dataClassTrue[indxTrue], dataClassFalse[indxFalse]]
 
-        # maximize margin in respect of weight.
+        # maximize margin with respect to weight.
         [maxMargin, weight] = DoMaximize(weight, sv)
 
         margins[1] = margins[0]
@@ -100,14 +100,18 @@ def SupportVectorMachine(data, weight, train=True):
         return taggedData
 
 def main():
+    # prepare data.
     iris_dataset = load_iris()
     [dataForTraining, dataForTest] = MakeIrisDataset(iris_dataset)
     dataForTest = np.append(dataForTest[0], dataForTest[1], 0)
     dataSize = np.size(dataForTraining[0][0])
     weight = np.random.rand(dataSize + 1)
 
+    # main process.
     weight = SupportVectorMachine(dataForTraining, weight, train=True)
     taggedData = SupportVectorMachine(dataForTest, weight, train=False)
+    
+    # display result.
     print(np.sum(np.array(taggedData[:25]).astype(np.int)))
     print(np.sum(np.array(taggedData[25:]).astype(np.int)))
 if __name__ == '__main__':
