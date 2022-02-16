@@ -11,5 +11,5 @@ https://www.youtube.com/watch?v=_PwhiWxHK8o <br>
 For the sake of simplicity, there are some mathematical simplifications and is no learning method in the video above. <br>
 So I fixied it and add a learning method of my own. Off cource it's not as good as one in scikit-learn or other libraries.
 
-## excuse
+## Excuse
 This repository is just for practicing so I'm not following the proper usage of git.
