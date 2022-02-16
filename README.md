@@ -5,7 +5,7 @@ https://techdevguide.withgoogle.com/resources/former-coding-interview-question-w
 
 Solution: just listing up every permutation and check every one of it.
 
-## Supprt Vector Machine
+## Support Vector Machine
 This implementation is based on this: <br>
 https://www.youtube.com/watch?v=_PwhiWxHK8o <br>
 For the sake of simplicity, there are some mathematical simplifications and is no learning method in the video above. <br>
